@@ -1,0 +1,27 @@
+if ($value != '' AND  $value <= $qty AND $column != 'Sage_International_Order.PI_Date' ){
+
+$quantity_query = " select Quantity_Ordered from SagePoLine where Line_ID in (select line_id from Sage_International_Order where Int_Order_ID= $id)";
+    $quantity = sqlsrv_query($conn, $quantity_query);
+
+    if( $quantity  === false ) {
+        die( print_r( sqlsrv_errors(), true));
+    }
+    
+    // Make the first (and in this case, only) row of the result set available for reading.
+    if( sqlsrv_fetch( $quantity ) === false) {
+        die( print_r( sqlsrv_errors(), true));
+    }
+    $qty = sqlsrv_get_field( $quantity, 0);
+
+
+    if ($value != ''){
+
+        if ($column = 'Sage_International_Order.MIPO_Quantity' and $value > $qty){
+            echo 'Invalid Quantity';
+
+            
+            echo($quantity_query);
+        }
+        else{ }
+
+    

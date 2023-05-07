@@ -1,0 +1,170 @@
+html,body{
+  /* background-image: url('logistics2.jpg'); */
+  /* background-size: cover;
+  background-repeat: no-repeat;
+  height: 100%; */
+  font-family: 'Numans', sans-serif;
+  }
+.accordion {
+    background-color: lightskyblue;
+    color:black;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    border: none;
+    text-align: center;
+    outline: none;
+    font-size: 15px;
+    font-weight: normal;
+    transition: 0.4s;
+    margin-bottom: 8px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-right-color: blue; 
+  }
+  .accordion2 {
+    background-color: rgb(255, 255, 255);
+    color:black;
+    cursor: pointer;
+    padding: 0px;
+    width: 100%;
+    border: none;
+    text-align: center;
+    outline: none;
+    font-size: 15px;
+    font-weight: normal;
+    transition: 0.4s;
+    margin-bottom: 8px;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    border-right-color: blue; 
+  }
+
+
+
+  
+  .active, .accordion:hover {
+    background-color: #ccc;
+    
+  }
+  .active, .accordion2:hover {
+    background-color: #ccc;
+    
+  }
+  
+  
+  .accordion:after {
+    content: '\002B';
+    color: #777;
+    font-weight: bold;
+    float: right;
+    margin-left: 5px;
+  }
+ 
+  .accordion2:after {
+    content: '\002B';
+    color: #777;
+    font-weight: bold;
+    float: right;
+    margin-left: 5px;
+  }
+
+  .active:after {
+    content: "\2212";
+  }
+  
+  .active:after {
+    content: "\2212";
+  }
+
+  .panel {
+    padding: 0 18px;
+    background-color: whitesmoke;
+    border-color: black;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-out;
+    margin-bottom: 8px;
+    max-width: auto;
+
+  }
+.card{
+  
+    margin: 0 auto;
+    padding: 0, 40px;
+    border-right-color: pink;
+    border-width: 2px;
+
+}
+#approval-btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+#approval-btn  button{
+    /* display: ; */
+    /* height: 100px; */
+    width: 100px;
+    margin-bottom: 10px;
+    text-align: center;
+    text-justify: center;
+}
+
+form, .content {
+  width: 30%;
+  margin: 0px auto;
+  padding: 20px;
+  border: 1px solid #B0C4DE;
+  background: white;
+  border-radius: 0px 0px 10px 10px;
+}
+.input-group {
+  margin: 10px 0px 10px 0px;
+}
+.input-group label {
+  display: block;
+  text-align: left;
+  margin: 3px;
+}
+.input-group input {
+  height: 30px;
+  width: 93%;
+  padding: 5px 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid gray;
+}
+.btn {
+  padding: 10px;
+  font-size: 15px;
+  color: white;
+  background: #5F9EA0;
+  border: none;
+  border-radius: 5px;
+}
+
+
+.even-columns{
+  display:flex;
+}
+/* The Modal (background) */
+
+
+/* The Close Button */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+a{
+  font-weight: bold;
+}
+

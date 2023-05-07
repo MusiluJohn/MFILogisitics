@@ -1,0 +1,65 @@
+INSERT INTO dbo.CPL_SagePoLine (PONO,POID, LineID, SequenceNO, DocState)
+
+  SELECT
+
+   InvNum.OrderNum
+
+   ,Il.iInvoiceID
+
+   ,il.idInvoiceLines
+
+    ,IL.iLineID
+
+    ,InvNum.DocState
+
+  FROM dbo._btblInvoiceLines il
+
+  INNER JOIN dbo.InvNum    ON il.iInvoiceID = InvNum.AutoIndex
+
+  INNER JOIN dbo.vendor ven    ON invnum.AccountID = ven.dclink
+
+  WHERE InvNum.DocType = 5  AND InvNum.DocFlag = 1    AND InvNum.DocState IN (1,3,4)  AND ven.iclassid = 2
+
+AND il.idInvoiceLines NOT IN (SELECT LineID FROM  CPL_SagePoLine spl)
+
+ 
+
+     INSERT INTO CPL_SageInternationalOrder
+
+      (LineID,DocState)
+
+      SELECT      LineID,DocState
+
+      FROM 
+
+      CPL_SagePoLine spl WHERE spl.LineID NOT IN (SELECT LineID FROM CPL_SageInternationalOrder sio)
+
+ 
+
+ 
+
+update CPL_SagePoLine
+
+set CPL_SagePoLine.DocState = InvNum.DocState FROM InvNum
+
+where InvNUM.AutoIndex=CPL_SagePoLine.POID
+
+ 
+
+update CPL_SageInternationalOrder
+
+set CPL_SageInternationalOrder.DocState=CPL_SagePoLine.DocState FROM CPL_SagePoLine
+
+where CPL_SageInternationalOrder.LineID=CPL_SagePoLine.LineID
+
+ 
+ INSERT INTO CPL_SageInternationalInvoice
+      (LineID,IntOrderID)
+      SELECT
+      lineID, IntOrderID
+      FROM  
+     CPL_SageInternationalOrder spl WHERE spl.LineID NOT IN (SELECT lineID FROM CPL_SageInternationalInvoice sio) and docstate = 4 and MIPONO != ''
+
+update CPL_SageInternationalOrder set MIPONO = ucIDPOrdTxCMMIPONo, PINO =ucIDPOrdTxCMProformaNo , PIDate =  udIDPOrdTxCMIDFDate
+from _btblInvoiceLines where idInvoiceLines = LineID
+

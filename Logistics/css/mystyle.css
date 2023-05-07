@@ -1,0 +1,22 @@
+
+    table {border-collapse:collapse; padding:20px; }
+    td,th{padding:5px;width:200px;outline:none;}
+	div{outline:none;}
+    
+    .activate{
+        background:white;
+        border-top:1px solid #333;
+        border-left:1px solid #333;
+        border-right:1px solid #ccc;
+        border-bottom:1px solid #ccc;
+        padding:2px;
+    }
+	#Break th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: center;
+    background-color: #26e400;
+    color: white;
+  }
+
+
