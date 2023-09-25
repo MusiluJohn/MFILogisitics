@@ -28,11 +28,7 @@
 <?php include 'navbar2.php' ?>
 <!---Get shipment numbers--->
 <div class="container" style='margin-top:90px;'>
-    <span class='symbol-input100' style='margin-left:15px;'>
-    <i class='fa fa-user-circle' aria-hidden='true'><?php echo  $_SESSION['user'] ; ?></i></span>
-    <span class='symbol-input100' style='margin-left:15px;'>
-    <i class='fa fa-database' aria-hidden='true'><?php echo $_SESSION['db'] ; ?></i></span>
-    <a class="nav-link" href="index.php" style='color:blue'>sign out</a>
+<?php include 'login_details.php' ?>
 <div style="width:3000px;height:60px;">
 <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
 <button class='btn btn-success' style='margin-top:10px;margin-left:5px;margin-left:400px;' id="update" name="update" type="submit">CREATE SHIPMENT</button>

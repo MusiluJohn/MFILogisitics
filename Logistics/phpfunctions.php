@@ -38,33 +38,6 @@ $results = array('error' => false, 'data' => '');
          update #duty set duty =ce.rate from #duty join _cplscheme ce on #duty.scheme=ce.Scheme
          join _cplcostmaster cr 
          on ce.Cost_Code=cr.id where cost='duty'"; 
-         //EXCISE DUTY FORMULAE
-        $exciseduty="IF OBJECT_ID('tempdb..#exciseduty') IS NOT NULL DROP TABLE #exciseduty;
-     select distinct invoicelineid, cs.code, max(cme.scheme) as scheme, case when max(cmode) in ('AIR','Courier') then (max(amount*cs.rate*qty)+
-         max(case when cr.cost='InsuranceAmount' then isnull(cs.cost,0)else 0 end)+
-         max(case when cr.cost='OtherChargesOnAWBOrSea' then isnull(cs.cost,0) else 0 end))
-         when max(cmode)='SEA' then (max(amount*cs.rate*qty)+
-         max(case when cr.cost='InsuranceAmount' then isnull(cs.cost,0)else 0 end)+
-         max(case when cr.cost='OtherChargesOnAWBOrSea' then isnull(cs.cost,0) else 0 end)) 
-         + (max(case when cr.cost='FreightKsh' then isnull(cs.cost,0) else 0 end)) 
-         else 0 end as customs,
-         0 as exciseduty,0 as dutyperc
-         into #exciseduty
-         from stkitem st
-         join _cplshipmentlines cs
-         on st.stocklink=cs.stkcode join _cplshipmentmaster tm on cs.shipment_no=tm.shipment_no 
-         join _cplcostmaster cr on cs.costcode=cr.id
-         join _cplScheme cme on cs.scheme=cme.Scheme
-         join _cplshipment ct on cs.shipment_no=ct.cShipmentNo
-         where tm.id=cast($query as int) and st.ServiceItem<>1
-         group by invoicelineid,cs.code
-
-         update #exciseduty set dutyperc= rate from #exciseduty ey join _cplScheme ce on ey.scheme=ce.Scheme
-         where ce.Cost_Code=3";
-         //Update percentage on #exciseduty table as per scheme
-         $upeduty="update #exciseduty set exciseduty =isnull(ce.vat,0) from #exciseduty join _cplscheme ce on #exciseduty.scheme=ce.Scheme
-         join _cplcostmaster cr 
-         on ce.Cost_Code=cr.id where cost='EXCISE_DUTY'";
 
         //Calculate duty
         $updateduty="--update duty
@@ -74,22 +47,16 @@ $results = array('error' => false, 'data' => '');
         where tm.id=cast($query as int) and cr.cost='Duty' and calc_duty=1  and st.ServiceItem<>1";
 
         $updaterailway="--update railway levy
-        update _cplshipmentlines set cost=(0.02*cast(customs as float)) from _cplshipmentlines cs join _cplshipmentmaster tm
+        update _cplshipmentlines set cost=(0.015*cast(customs as float)) from _cplshipmentlines cs join _cplshipmentmaster tm
         on cs.shipment_no=tm.shipment_no join #duty dt on cs.invoicelineid=dt.invoicelineid
         join _cplcostmaster cr on cs.costcode=cr.id join stkitem st on cs.stkcode=st.StockLink
         where tm.id=cast($query as int) and cr.cost='RailwayLevy'   and st.ServiceItem<>1";
 
         $updategok="--update gok
-        update _cplshipmentlines set cost=(0.035*cast(customs as float)) from _cplshipmentlines cs join _cplshipmentmaster tm
+        update _cplshipmentlines set cost=(0.025*cast(customs as float)) from _cplshipmentlines cs join _cplshipmentmaster tm
         on cs.shipment_no=tm.shipment_no join #duty dt on cs.invoicelineid=dt.invoicelineid
         join _cplcostmaster cr on cs.costcode=cr.id join stkitem st on cs.stkcode=st.StockLink
         where tm.id=cast($query as int) and cr.cost='GOK'   and st.ServiceItem<>1";
-
-        $updateexcise=" --update excise duty
-         update _cplshipmentlines set cost=((cast(exciseduty as float)/100))*(cast(customs as float)+(cast(customs as float)*dutyperc/100)) from _cplshipmentlines cs join _cplshipmentmaster tm
-         on cs.shipment_no=tm.shipment_no join #exciseduty dt on cs.invoicelineid=dt.invoicelineid
-         join _cplcostmaster cr on cs.costcode=cr.id
-         where tm.id=cast($query as int) and cr.cost='EXCISE_DUTY'";
 
         $sql3="/*update _cplshipmentlines set cost=  (case when cb.calcbase='volume' then volume/nullif(tot,0)*ce.rate when cb.calcbase='weight' then weight/nullif(totweight,0)*ce.rate when cb.calcbase='FOB' then 
          ((amount*qty)/nullif(amt,0) * ce.rate) when cb.calcbase='N/A' then ts.cost else 0 end ) from	_cplshipmentlines ts join _cplScheme ce on ts.costcode=ce.Cost_Code and ce.Scheme=ts.scheme 
@@ -112,7 +79,7 @@ $results = array('error' => false, 'data' => '');
          join #totals tts on ts.stkcode=tts.stkcode
          where tr.id=cast($query as int)";
          $actualfactor="IF OBJECT_ID('tempdb..#actualfactor') IS NOT NULL DROP TABLE #actualfactor
-         select distinct invoicelineid,code,stkcode,round(((sum(ts.Cost)+(max(amount)*max(qty)*max(rate)))/(max(amount)*max(qty)*max(rate))),2) as factor
+         select distinct invoicelineid,code,stkcode,round(((sum(ts.Cost)+(max(amount)*max(qty)*max(rate)))/(max(nullif(amount,0))*max(qty)*max(rate))),2) as factor
          into #actualfactor
          from _cplshipmentlines ts
          join _cplshipmentmaster tr on ts.shipment_no=tr.shipment_no
@@ -244,7 +211,7 @@ $results = array('error' => false, 'data' => '');
             join #totals tts on ts.stkcode=tts.stkcode
             where tr.id=$query
 
-            update _cplshipmentlines set rate=(case when (foreigncurrencyid)=1 then isnull((fexchrateusd),0) else isnull((       fexchrateeur),0) end) from _cplshipmentlines ts join _cplshipmentmaster tr on
+            update _cplshipmentlines set rate=(case when isnull(fexchrateusd,0)<>0 then  fexchrateusd when isnull(fexchrateeur,0)<>0 then fexchrateeur else isnull(rate,1) end) from _cplshipmentlines ts join _cplshipmentmaster tr on
             ts.shipment_no=tr.shipment_no 
             join _cplshipment c on tr.shipment_no=c.cShipmentNo
             join invnum d on d.ordernum=ts.po_no
@@ -263,10 +230,8 @@ $results = array('error' => false, 'data' => '');
          sqlsrv_query($conn,$updatesagency) or die(print_r( sqlsrv_errors(), true));   
          sqlsrv_query($conn,$sql2) or die(print_r( sqlsrv_errors(), true));
          sqlsrv_query($conn,$duty) or die(print_r( sqlsrv_errors(), true));
-         sqlsrv_query($conn,$exciseduty) or die(print_r( sqlsrv_errors(), true));
-         sqlsrv_query($conn,$upeduty) or die(print_r( sqlsrv_errors(), true));
+        /* sqlsrv_query($conn,$upeduty) or die(print_r( sqlsrv_errors(), true)); */
          sqlsrv_query($conn,$updateduty) or die(print_r( sqlsrv_errors(), true));
-         sqlsrv_query($conn,$updateexcise) or die(print_r( sqlsrv_errors(), true));
          sqlsrv_query($conn,$sql3) or die(print_r( sqlsrv_errors(), true));
          sqlsrv_query($conn,$updaterailway) or die(print_r( sqlsrv_errors(), true));
          sqlsrv_query($conn,$updategok) or die(print_r( sqlsrv_errors(), true));

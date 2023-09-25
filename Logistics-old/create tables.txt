@@ -1,0 +1,48 @@
+CREATE TABLE [MFI-DS].dbo.CPL_SagePoLine (
+  Line_ID INT NOT NULL
+ ,Stock_ID INT NOT NULL
+ ,Quantity_Ordered FLOAT NULL
+ ,Stock_Ordercode VARCHAR(50) NULL
+ ,PO_NO VARCHAR(50) NULL
+ ,Sequence_NO INT NULL
+ ,Quantity_Processed FLOAT NULL
+ ,PRIMARY KEY CLUSTERED (Line_ID)
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [MFI-DS].dbo.CPL_SageUsers (
+  UserCode INT IDENTITY
+ ,UserName VARCHAR(50) NULL
+ ,Password VARCHAR(100) NULL
+ ,FirstName VARCHAR(50) NULL
+ ,LastName VARCHAR(50) NULL
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [MFI-DS].dbo.CPL_Sage_International_Order (
+  Int_Order_ID INT IDENTITY
+ ,Line_ID INT NULL
+ ,MIPO_NO VARCHAR(50) NULL
+ ,MIPO_Quantity FLOAT NULL
+ ,PI_NO VARCHAR(50) NULL
+ ,PI_Date DATE NULL
+ ,New_Item_code VARCHAR(50) NULL
+ ,Agent VARCHAR(50) NULL
+ ,DateTimeStamp DATETIME NULL
+ ,PRIMARY KEY CLUSTERED (Int_Order_ID)
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [MFI-DS].dbo.[CPL_Sage International Invoice] (
+  ID INT IDENTITY
+ ,Line_ID INT NULL
+ ,Int_Order_ID INT NULL
+ ,CI_NO VARCHAR(50) NULL
+ ,CI_Date DATE NULL
+ ,CI_Quantity FLOAT NULL
+ ,Final_Item_Code VARCHAR(50) NULL
+ ,Pickup_NO VARCHAR(50) NULL
+ ,Agent VARCHAR(50) NULL
+ ,DateTimeStamp DATETIME NULL
+) ON [PRIMARY]
+GO

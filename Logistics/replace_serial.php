@@ -20,11 +20,7 @@
 <?php include 'navbar2.php' ?>
 <hr></hr>
 <div id="replaceserials" style='margin-top:90px;'>
-    <span class='symbol-input100' style='margin-left:15px;'>
-    <i class='fa fa-user-circle' aria-hidden='true'><?php echo  $_SESSION['user'] ; ?></i></span>
-    <span class='symbol-input100' style='margin-left:15px;'>
-    <i class='fa fa-database' aria-hidden='true'><?php echo $_SESSION['db'] ; ?></i></span>
-    <a class="nav-link" href="index.php" style='color:blue'>sign out</a>
+<?php include 'login_details.php' ?>
 <a>Select the item code from the drop down below and click search for the serial numbers to be
 listed on the grid below: 
 </a>
@@ -54,7 +50,7 @@ listed on the grid below:
                     if ($stmt) {			 
                     echo "<select name='code' id='code' class='form-control' style='width:300px;height:30px;'>";
                         while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {				
-                            echo "<option  value=" .$row["code"]. "> " .$row["code"]. "      " .$row["description_1"]. "</option>";
+                            echo "<option  value='" .$row["code"]. "'> " .$row["code"]. "  " .$row["description_1"]. "</option>";
                         } 	
                     echo"</select>";
                     }

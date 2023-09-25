@@ -1,0 +1,167 @@
+#bottom-table, #top-table{
+    font-weight: bolder;
+    font-size:22px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+#co_name{
+    text-decoration: underline;
+}
+#sup_copy,#inv_paid,#cn_head,#sup_copy_two{
+    border-style: solid;
+    font-size:15px;
+}
+#sup_copy_td{
+    width: 100px;
+}
+#remit, #co_name,  #d, #sup_name,#batch{
+    font-size:22px;
+}
+#columns,#totals,#summary, .summary2{
+    font-size:18px;
+}
+#middle-table, #columns, #middle-bottom-table{
+    font-size: 19px;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+tfoot{
+    font-weight: bolder;
+}
+
+#middle-table{
+        position: absolute;
+        top: 135px;
+        width: 100%;
+}
+.totals{
+    position: absolute;
+    top: 480px;
+    width: 100%;
+    font-size:19px;
+}
+#cn-table-one{
+    position: absolute;
+    top: 550px;
+    width: 100%;
+    font-size:19px;
+}
+.summary{
+    position: absolute;
+    top: 700px;
+    width: 100%;
+    font-size:19px;
+}
+.totals2{
+    position: absolute;
+    top: 1228px;
+    width: 100%;
+    font-size:19px;
+}
+#cn-table{
+    position: absolute;
+    top: 1300px;
+    width: 100%;
+    font-size:20px;
+}
+.summary2{
+    position: absolute;
+    top: 1460px;
+    width: 100%;
+    font-size:19px;
+}
+ #bottom-table{
+    position: absolute;
+    top: 750px;
+    width:100%;
+ }
+#middle-bottom-table{
+    position: absolute;
+    top: 870px;
+    width:100%;
+}
+
+#top-table{
+    position:absolute;
+    top:15px;
+}
+#top-table{
+    table-layout: auto;
+    width:100%;
+}
+#seperate{
+    position: absolute;
+    top: 725px;
+}
+
+#sup_copy{
+    position: absolute;
+    top: 47px;
+    left:650px;
+}
+#sup_copy_two{
+    position: absolute;
+    top: 790px;
+    left:640px;
+}
+#table_row{
+   height:5px;
+}
+#middle-table .m-left{
+    text-align: left;
+}
+#middle-table .m-right{
+    text-align: right;
+}
+#middle-table .row_one{
+    height:3px;
+    margin-top: 0px;
+}
+#middle-table #middle-table-head{
+    border-bottom:solid 0.5px;
+}
+#middle-table{
+    border-bottom:solid 0.5px;
+}
+#cn-table-one .border-bottom{
+    height:2px;
+}
+#middle-bottom-table #row_one{
+    height:2px;
+}
+#middle-bottom-table .middle-bottom-head{
+    border-bottom:solid 0.5px;
+}
+#middle-bottom-table{
+    border-bottom: solid 1px;
+}
+#middle-bottom-table .m-left{
+    text-align: left;
+}
+#middle-bottom-table .m-right{
+    text-align: right;
+}
+#cn-table-one #cn-table-one-row{
+    border-bottom: solid 1px;
+    height:2px;
+}
+#cn-table-one{
+    border-bottom:solid 1px;
+}
+#cn-table{
+    border-bottom: solid 1px;
+}
+#cn-table #cn-table-row{
+    border-bottom: solid 1px;
+    height:2px;    
+}
+#batch{
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+}
+#summary{
+    width:100%;
+}
+#headings{
+    width:100%;
+}

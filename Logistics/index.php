@@ -35,6 +35,11 @@ session_start();
 <input type="password" class="form-control" name="pwd" placeholder="Password" required>
 </div>
 <div class="form-group">
+<select type="database" class="form-control" name="database" id="database">
+<option>MFI-DS</option><option>MFI-TS</option>
+</select>
+</div>
+<div class="form-group">
 <button type="submit" name="login" class="btn btn-info">Login</button>
 </div>
 </form>
@@ -46,10 +51,13 @@ session_start();
 </center>
 </body>
 <?php
-include("config2.php");
+
 if (isset($_POST['login'])){
 $name=$_POST['name'];
 $password=$_POST['pwd'];
+$db=$_POST['database'];
+$_SESSION['db']=$db;
+include("config.php");
 $sqlQuery = "select * FROM CPL_sageusers WHERE UserName='$name'";
 $user=sqlsrv_query($conn, $sqlQuery);
 

@@ -1,21 +1,20 @@
 <?php
 
-include("config.php");
 ?>
 <html>
 <head>
 <link rel="stylesheet" type="text/css" href="css/bootstrap1.css"/>
-<link rel="stylesheet" type="text/css" href="css/bootsrap2.css"/>
+<link rel="stylesheet" type="text/css" href="css/bootstrap2.css"/>
 <link rel="stylesheet" href="css/style.css">
 <link href="//netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
-<script src="//netdna.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="js/script.js"></script>
-<script src="js/bootstrap1.js"></script>
-<script src="js/bootstrap2.js.js"></script>
-<script src="js/bootstrap3.js"></script>
 <script src="js/jquery1.js"></script>
 <script src="js/jquery2.js"></script>
+<script src="js/bootstrap1.js"></script>
+<script src="js/bootstrap2.js"></script>
+<script src="js/bootstrap3.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
@@ -24,11 +23,7 @@ include("config.php");
 <body>
 <?php include 'navbar2.php' ?>
 <div style='margin-top:90px;'>
-    <span class='symbol-input100' style='margin-left:15px;'>
-    <i class='fa fa-user-circle' aria-hidden='true'><?php echo  $_SESSION['user'] ; ?></i></span>
-    <span class='symbol-input100' style='margin-left:15px;'>
-    <i class='fa fa-database' aria-hidden='true'><?php echo $_SESSION['db'] ; ?></i></span>
-    <a class="nav-link" href="index.php" style='color:blue'>sign out</a>
+<?php include 'login_details.php' ?>
 <table>
 <tr style='width:200px;'>
 <form method="post" action="">
@@ -74,7 +69,7 @@ include("config.php");
         <?php  
                 include("config.php");
                 $conn2 = sqlsrv_connect( $servername, $connectioninfo);
-                $sql2 = "Select distinct dclink,name from vendor where dclink=847";	
+                $sql2 = "Select distinct dclink,name from vendor where account='LandedSupp'";	
                 $stmt2 = sqlsrv_query($conn2,$sql2);
                 if ($stmt2) {			 
                 echo "<select id='vendor' name='vendor' class='form-control select2' style='width:300px;height:30px;margin-bottom:5px;'>";
@@ -182,7 +177,7 @@ include("config.php");
                 die( print_r( sqlsrv_errors(), true) );
             }
             while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
-                $id=$row['code']; ?>
+                $id=$row['stkcode']; ?>
                 <tr>
                 <td id='code[]' name='code[]'> <?php echo $row["code"] ;?></td>
                 <td id='description[]' name='description[]'> <?php echo $row["description"] ;?></td>
@@ -193,7 +188,7 @@ include("config.php");
                 <td><input class='form-control' style='width:200px;border-top-style: hidden;border-right-style: hidden;border-left-style: hidden;border-bottom-style: hidden;' type='number' id='unitcst[]' name='unitcst[]' value=<?php echo $row["unitcst"] ;?> disabled></td>
                 <td id='qty<?php echo $id; ?>'> <?php echo $row["qty"] ;?></td>
                 <td id='recqty<?php echo $id; ?>'> <?php echo $row["recqty"] ;?></td>
-                <td> <input id='qtyrec<?php echo $id; ?>' name='qtyrec[]' value=<?php echo $row["qty"]-$row['recqty'] ;?> type='text' class='form-control'></input></td>	
+                <td> <input id='qtyrec<?php echo $id; ?>' name='qtyrec[]' value=<?php echo $row["qty"]-$row['recqty'] ;?> type='number' class='form-control'></input></td>	
                 <script>
                     $(document).ready(function(){
                     $("#qtyrec<?php echo $id; ?>").keyup(function(){
@@ -206,7 +201,6 @@ include("config.php");
                                     }
                                     else{
                                     alert(result);
-                                    $("#qtyrec<?php echo $id; ?>").val('');
                                     }
                             },
                             error: function(result) {

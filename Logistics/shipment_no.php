@@ -21,8 +21,16 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+
 <script src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
 <link href="https://cdn.datatables.net/1.11.4/css/jquery.dataTables.min.css" rel="stylesheet">
+<script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.print.min.js"></script>
+<link href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.dataTables.min.css" rel="stylesheet"> 
 <style>
 /* Style for positioning toast */
 .toast{
@@ -67,7 +75,7 @@
         include("config.php");
         $query = $_GET['SH'];
           $conn = sqlsrv_connect( $servername, $connectioninfo);
-             $sql="select distinct (case when isnull(fexchrateusd,0)<>0 then  fexchrateusd when isnull(fexchrateeur,0)<>0 then fexchrateeur else rate end) as rate from _cplshipmentlines cs join _cplshipmentmaster cr 
+             $sql="select distinct (case when isnull(fexchrateusd,0)<>0 then  fexchrateusd when isnull(fexchrateeur,0)<>0 then fexchrateeur else isnull(rate,1) end) as rate from _cplshipmentlines cs join _cplshipmentmaster cr 
             on cs.shipment_no=cr.shipment_no join _cplshipment c on cr.shipment_no=c.cShipmentNo
             where cr.id=$query";    
              $stmt = sqlsrv_query($conn,$sql);     
@@ -1313,9 +1321,35 @@
                             }); 
                         });
         </script>
+        <td style='width:100px;'>
+        <a style='font-size:10px;margin-left:10px;'>Calc Excise Duty: </a>
+        <select id='calc_exc' name='calc_exc' class="form-select" style="height:35px;">
+            <option value='' selected disabled hidden>select</option>
+            <option value='yes'>yes</option>
+            <option value='no'>no</option>
+        </select>
+        </td>
+        <script>
+            $(document).ready(function(){
+            $('#calc_exc').change(function(){
+                $.ajax({
+                    url: 'calc_excise_duty.php',
+                    type: 'post',
+                    data: {id: <?php echo $_GET['SH']; ?>,excise: $('#calc_exc').val(),rate: $('#rate').val()},
+                    success: function(result){
+                        $('.toast').toast({
+                            animation: false,
+                            delay: 50000
+                        });
+                        $('.toast').toast('show');
+                        window.location.reload();
+                    }
+                    })
+                            }); 
+                        });
+        </script>
         <hr></hr>
                     </form>
-    <td></td>
     <td></td>
     <td></td>
     <td></td>
@@ -1409,10 +1443,10 @@
                 <th>Unit Weight</th>
                 <th>Volume</th>
                 <th>Highest</th>
+                <th>Qty</th>
 				<th>Unit Amt Foreign</th>
                 <th>Total Amt Foreign</th>
                 <th>Total Amt Kes</th>
-                <th>Qty</th>
                 <th>Total Weight</th>	
                 <th>Rate KES</th>
                 <th>Swift Charges KES</th>
@@ -1579,55 +1613,19 @@
                         <option value=1>True</option>
                         <option value=0>False</option>
                     </SELECT></td>
-                    <script>
-                    $(document).on('change','#calcduty<?php echo $rows;?>', function(){           
-                                        $.ajax({
-                                                url: 'calc_calcduty.php',
-                                                type: 'POST',
-                                                data: {id: $('#shipid<?php echo $rows;?>').val(),
-                                                calcduty: $('#calcduty<?php echo $rows;?>').val()
-                                                },
-                                                success: function(){
-                                                    $('.toast').toast({
-                                                        animation: false,
-                                                        delay: 50000
-                                                    });
-                                                    $('.toast').toast('show');
-                                                    window.location.reload();
-                                                }
-                                                })
-                                        });
-                    </script>
                     <td id="unweight"> <?php echo $row["unit_weight"] ;?></td>
                     <td id="volume"> <?php echo $row["volume"] ;?></td>
                     <td id="high"><?php echo $row["Highest"] ;?></td>
+                    <td id="qtys"> <?php echo $row["qty"] ;?></td>
                     <td id="fob"> <?php echo $row["amount"] ;?></td>		
                     <td id="totamt"> <?php echo $row["tot_amount"] ;?></td>	
                     <td id="totamtkes"> <?php echo $row["tot_amount_kes"] ;?></td> 
-                    <td id="qtys"> <?php echo $row["qty"] ;?></td>
                     <td id="totweight"> <?php echo $row["weight"] ;?></td>
                     <td> <?php echo $row["rate"] ;?></td>
                     <td id="swifts"> <?php echo $row["Swift"] ;?></td>
                     <td id="insu"> <?php echo $row["Insurance"] ;?></td>
                     <td> <?php echo $row["dutyper"] ;?></td>
                     <td> <a hidden id="no"><?php echo $row["Duty"] ;?></a><input style='width:90px;height:15px;border:none;border-bottom:2px solid grey;opacity:1;'  id='duty<?php echo $rows;?>' name='duty<?php echo $rows;?>' value="<?php echo $row["Duty"] ;?>" disabled /></td>
-                    <script>
-                        $(document).ready(function(){
-                        $('#duty<?php echo $rows;?>').change(function(){
-                            $.ajax({
-                                url: 'chduty.php',
-                                type: 'post',
-                                data: {code: $('#code<?php echo $rows;?>').val(),duty: $('#duty<?php echo $rows;?>').val(),
-                                id:<?php echo $_GET['SH']; ?>},
-                                success: function(result){
-                                alert('updated');
-                                window.location.reload();
-                                }
-                                
-                                })
-                                        }); 
-                                    });
-                    </script>
                     <td id="raillevy"> <?php echo $row["Railway_Levy"] ;?></td>
                     <td id="goktot"> <?php echo $row["GOK"] ;?></td>
                     <td id="custs"> <?php echo $row["customs_value"] ;?></td>	
@@ -1686,10 +1684,10 @@
 					<th id="unitw"> <label id="weight"></a></th>
                     <th></th>
                     <th></th>
+                    <th id="totalqty"> <label id="qty"></a></th>
                     <th id="fobtots"> </th>
                     <th id="totamount"> <label id="amount"></a></th>		
                     <th id="totamountkes"> <label id="totamountkes"></a></th>
-                    <th id="totalqty"> <label id="qty"></a></th>
                     <th id="tweight"> <label id="tot_weight"></a></th>
                     <th> <label id="tot_tot_weight"></a> </th>
                     <th id="swiftc"> <label id="swifttot"></a> </th>
@@ -1735,13 +1733,68 @@
         </tbody>
     </table>
     <script>
-    $(document).ready( function () {
-        $('#cost_table').DataTable({
-            paging: true,
-            fixedHeader:true
-        });
+$(document).ready(function() {
+    $('#cost_table').DataTable( {
+        dom: 'Bfrtip',
+        paging: 'True',
+        lengthMenu: [
+        [10, 25, 50, -1],
+        [10, 25, 50, 'All'],
+    ],
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ]
     } );
+} );
     </script>
+        <script>
+    $(document).on('change','#calcduty<?php echo $rows;?>', function(){           
+                        $.ajax({
+                                url: 'calc_calcduty.php',
+                                type: 'POST',
+                                data: {id: $('#shipid<?php echo $rows;?>').val(),
+                                calcduty: $('#calcduty<?php echo $rows;?>').val()
+                                },
+                                success: function(){
+                                    $('.toast').toast({
+                                        animation: false,
+                                        delay: 50000
+                                    });
+                                    $('.toast').toast('show');
+                                    window.location.reload();
+                                }
+                                })
+                        });
+    </script>
+    <script>
+    $(document).ready(function(){
+    $('#duty<?php echo $rows;?>').change(function(){
+        $.ajax({
+            url: 'chduty.php',
+            type: 'post',
+            data: {code: $('#code<?php echo $rows;?>').val(),duty: $('#duty<?php echo $rows;?>').val(),
+            id:<?php echo $_GET['SH']; ?>},
+            success: function(result){
+            alert('updated');
+            window.location.reload();
+            }
+            
+            })
+                    }); 
+                });
+</script>
+<!-- <script src="assets/js/script.min.js"></script>
+    <script src="./assets/js/excel.js"></script>
+    <script>
+        function ExportToExcel(type, fn, dl) {
+            //var item=document.getElementById('code').value;
+            var elt = document.getElementById('cost_table');
+            var wb = XLSX.utils.table_to_book(elt, { sheet: "sheet1" });
+            return dl ?
+                XLSX.write(wb, { bookType: type, bookSST: true, type: 'base64' }):
+                XLSX.writeFile(wb, fn || ('Shipment' + '.' + (type || 'xlsx')));
+            }
+    </script>  -->
     <hr></hr>
     <hr></hr>
     </form>

@@ -33,11 +33,7 @@
 <body onload="selectall()">
 <?php include 'navbar2.php' ?>
 <div id="table" style='margin-top:90px;'>
-    <span class='symbol-input100' style='margin-left:15px;'>
-    <i class='fa fa-user-circle' aria-hidden='true'><?php echo  $_SESSION['user'] ; ?></i></span>
-    <span class='symbol-input100' style='margin-left:15px;'>
-    <i class='fa fa-database' aria-hidden='true'><?php echo $_SESSION['db'] ; ?></i></span>
-    <a class="nav-link" href="index.php" style='color:blue'>sign out</a>
+<?php include 'login_details.php' ?>
 <ul><a>Select the lines you would like to add to a shipment then click "CREATE" below:</a></ul>
 <table class="table table-bordered table-striped table-hover" style='font-size:10px;margin-top:5px;'>
         <thead>
@@ -66,9 +62,11 @@
 		
 			 $sql = "select bl.ilineid AS Row#,bl.idinvoicelines as id,st.stocklink as stocklink, st.Code as code,ordernum as ordernum,st.Description_1, ucIIScheme,ufIIweight, invnumber, fquantity,bl.fQtyLastProcess, fQtyLastProcessLineTotInclForeign from _btblinvoicelines bl join StkItem st on bl.istockcodeid=st.stocklink 
 			 join invnum im on bl.iInvoiceID=im.AutoIndex
-			 join _etblUserHistLink ek on ek.TableID=im.autoindex 
+			 join (select  ROW_NUMBER() OVER ( PARTITION BY TableID ORDER BY (iduserhistlink) desc ) row_num,max(lastmodifieddate) as d, TableID,max(UserValue) as uservalue,UserDictID from _etblUserHistLink group by TableID, UserDictID,iduserhistlink
+			 ) ek on ek.TableID=im.autoindex 
 			 join _rtblUserDict rt on ek.UserDictID=rt.idUserDict
-			 where rt.cFieldName='ucIDPOrdShipmentNo' and ek.UserValue ='$query'  and im.doctype=5 and im.docflag in (1) and im.docstate in (4) and bl.fqtyLastprocess>0  and im.InvNumber<>''
+			 where rt.cFieldName='ucIDPOrdShipmentNo'  and im.doctype=5 and im.docflag in (1) and im.docstate in (4) and bl.fqtyLastprocess>0  and im.InvNumber<>''
+			 and ek.UserValue ='$query' and ek.row_num=1
 			 order by ordernum";
 			 $params = array();
 			 $options =  array( "Scrollable" => SQLSRV_CURSOR_KEYSET );
@@ -94,7 +92,7 @@
 						<option id='C' name='C'>C 35%</option>
 						<option id='D' name='D'>D 25%</option>	
 					</select></td>
-					<td><input style='width:90px;height:12.5px;' class='form-control' id='weight<?php echo $rows;?>' name='weight<?php echo $rows;?>' value="<?php echo $row["ufIIweight"] ;?>" /></td>
+					<td><input type='number' style='width:90px;height:12.5px;' class='form-control' id='weight<?php echo $rows;?>' name='weight<?php echo $rows;?>' value="<?php echo $row["ufIIweight"] ;?>"  /></td>
 					<script>
 						$(document).ready(function(){
 						$('#weight<?php echo $rows;?>').change(function(){

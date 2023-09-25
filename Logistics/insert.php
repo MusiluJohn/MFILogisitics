@@ -18,7 +18,7 @@ if(isset($_POST["submit"])) {
         join _cplScheme ce on st.ucIIScheme=ce.Scheme
         join _cplcostmaster cr on ce.Cost_Code=cr.id  
         join _etblUserHistLink ek on ek.TableID=im.autoindex 
-        join _rtblUserDict rt on ek.UserDictID=rt.idUserDict
+        join _rtblUserDict rt on ek.UserDictID=rt.idUserDict and uservalue='" .$_SESSION['shipment_no']. "'
         join _cplshipment v on v.cShipmentNo=ek.UserValue
         where bl.idinvoicelines=$id and rt.cFieldName='ucIDPOrdShipmentNo'";
         sqlsrv_query($conn, $update) or die(print_r( sqlsrv_errors(), true));

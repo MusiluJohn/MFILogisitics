@@ -1,7 +1,11 @@
 <?php
-$servername = "MUSILU\MSSQLSERVER_2019" ;
-$_SESSION['db']='MFI-DS';
-$connectioninfo = array( "Database"=>"MFI-DS", "UID"=>"sa", "PWD"=>"john");
+if(!isset($_SESSION)) 
+{ 
+    session_start(); 
+} 
+$servername = "192.168.180.124" ;
+$db=$_SESSION['db'];
+$connectioninfo = array( "Database"=>"$db", "UID"=>"sa", "PWD"=>"P@ssw0rd123$");
 //$connectioninfo = array( "Database"=>"MFI-DS", "UID"=>"sa", "PWD"=>"P@ssw0rd");
 $conn = sqlsrv_connect( $servername, $connectioninfo);
 

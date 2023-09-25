@@ -37,11 +37,7 @@ include("php_functions.php");
 <?php include 'navbar2.php' ?> 
 <!---Get shipment numbers--->
 <div class="container" style='margin-top:90px;'>
-    <span class='symbol-input100' style='margin-left:15px;'>
-    <i class='fa fa-user-circle' aria-hidden='true'><?php echo  $_SESSION['user'] ; ?></i></span>
-    <span class='symbol-input100' style='margin-left:15px;'>
-    <i class='fa fa-database' aria-hidden='true'><?php echo $_SESSION['db'] ; ?></i></span>
-    <a class="nav-link" href="index.php" style='color:blue'>sign out</a>
+<?php include 'login_details.php' ?>
 <div style="width:3000px;height:200px;">
 <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
 <form method="GET" action="">
@@ -155,7 +151,7 @@ $('#update').click(function(){
     <tr><td style='width:100px;'><label style='margin-top:10px;'>Insurance Charges KES: </label></td><td><input name='inschgs' id='inschgs' class='form-control' type='number' value=<?php inscharges(); ?> style='margin-top:10px;'/></td></tr>
     <tr><td style='width:100px;'><label style='margin-top:10px;'>Agency Fees KES: </label></td><td><input name='agfees' id='agfees' class='form-control' type='number' value=<?php agencyfees(); ?> style='margin-top:10px;'/></td></tr>
     <tr><td style='width:100px;'><label style='margin-top:10px;'>KEBS Fees KES: </label></td><td><input name='kebsfees' id='kebsfees' class='form-control' type='number' value=<?php kebsfees(); ?>  style='margin-top:10px;'/></td></tr>
-    <tr><td style='width:100px;'><label style='margin-top:10px;'>AWB/BL No.: </label></td><td><input name='awbno' id='awbno' class='form-control' style='margin-top:10px;' value=<?php awbno(); ?>/></td></tr>
+    <tr><td style='width:100px;'><label style='margin-top:10px;'>AWB/BL No.: </label></td><td><input name='awbno' id='awbno' class='form-control' style='margin-top:10px;' value=<?php awbno(); ?> /></td></tr>
     <tr><td style='width:100px;'><label style='margin-top:10px;'>MI PO No.: </label></td><td><input name='mino' id='mino' class='form-control' style='margin-top:10px;'/></td></tr>
     <tr><td style='width:100px;'><label style='margin-top:10px;'>Main Supplier PI No.: </label></td><td><input name='pino' id='pino' class='form-control' style='margin-top:10px;'/></td></tr>
     <tr><td style='width:100px;'><label style='margin-top:10px;'>Main Supplier PI Date: </label></td><td><input name='pidate' id='pidate' class='form-control' type='date' style='margin-top:10px;'/></td></tr>
