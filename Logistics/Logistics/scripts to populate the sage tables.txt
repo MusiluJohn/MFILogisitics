@@ -1,0 +1,29 @@
+INSERT INTO dbo.SagePoLine (Stock_ID, Quantity_Ordered, Stock_Ordercode, PO_NO, Line_ID)
+  SELECT
+    il.iStockCodeID
+   ,il.fQuantity
+   ,si.Code
+   ,InvNum.OrderNum
+   ,il.idInvoiceLines
+  FROM dbo._btblInvoiceLines il
+  INNER JOIN dbo.StkItem si
+    ON il.iStockCodeID = si.StockLink
+  INNER JOIN dbo.InvNum
+    ON il.iInvoiceID = InvNum.AutoIndex
+  WHERE InvNum.DocType = 5
+  AND InvNum.DocState = 1
+AND Il.idInvoiceLines NOT IN (SELECT line_id FROM  SagePoLine spl)
+
+     INSERT INTO Sage_International_Order
+      (Line_ID)
+      SELECT
+      line_id 
+      FROM  
+      SagePoLine spl WHERE spl.Line_ID NOT IN (SELECT line_id FROM Sage_International_Order sio)
+
+	 INSERT INTO [Sage International Invoice]
+      (Line_ID,Int_Order_ID)
+      SELECT
+      line_id, Int_Order_ID
+      FROM  
+      Sage_International_Order spl WHERE spl.Line_ID NOT IN (SELECT line_id FROM [Sage International Invoice] sio)

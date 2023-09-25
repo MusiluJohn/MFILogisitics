@@ -68,7 +68,8 @@ session_start();
                     
                     $fromdate=$_GET['repfrmdate'];
                     $todate=$_GET['reptodate']; 
-                    $sql = "select row_number() over (order by invoiceid) row_num, invoice_date, invoiceno,c.Name, case when c.iCurrencyID>0 then (invoiceAmt * b.fExchangeRate)
+                    $sql = "select row_number() over (order by invoiceid) row_num, invoice_date, invoiceno,c.Name, 
+                    case when c.iCurrencyID>0 then (invoiceAmt * b.fExchangeRate)
                     else invoiceAmt end invoiceAmt,
                     case when c.iCurrencyID>0 then withholding_amt*fExchangeRate else withholding_amt end as withholding_amt 
                     ,case when c.iCurrencyID>0 then income_withheld_amt *fExchangeRate else income_withheld_amt end as inc_with_amt,                   
@@ -76,7 +77,8 @@ session_start();
                     from _cplsupplierwvat a left join postap b on a.invoiceid=b.AutoIdx left join vendor c on c.dclink=b.accountlink
                     where 
                     format(cast(payment_date as date),'yyyy-MM-dd') 
-                    between '$fromdate'  and '$todate'";
+                    between '$fromdate'  and '$todate'
+                    order by c.name asc";
                     $params = array();	
                     $stmt = sqlsrv_query($conn, $sql) or die(print_r( sqlsrv_errors(), true));
                     while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
@@ -117,11 +119,11 @@ session_start();
                     $todate=$_GET['reptodate']; 
                     $sql = "select '' as invoice_date , 
                     '' as row_num,
-                    '' as invoiceno,'' as Name, sum(invoiceAmt) as 
-                    invoiceAmt
-                    ,sum(withholding_amt) as withholding_amt, 
-                    sum(a.income_withheld_amt) as inc_with,
-                    sum(amount_payable) as amount_payable 
+                    '' as invoiceno,'' as Name, 
+                    case when max(b.iCurrencyID)>0 then sum(invoiceAmt * fexchangerate) else sum(invoiceAmt) end as invoiceAmt,
+                    case when max(b.iCurrencyID)>0 then sum(withholding_amt *fExchangeRate) else sum(withholding_amt) end as withholding_amt, 
+                    case when max(b.iCurrencyID)>0 then sum(a.income_withheld_amt * fExchangeRate) else sum(a.income_withheld_amt) end as inc_with,
+                    case when max(b.iCurrencyID)>0 then sum(amount_payable * fexchangerate) else sum(amount_payable) end as amount_payable                     
                     from _cplsupplierwvat a left join postap b on a.invoiceid=b.AutoIdx left join 
                     vendor c on c.dclink=b.accountlink
                     where 

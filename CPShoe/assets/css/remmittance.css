@@ -7,10 +7,10 @@
 #co_name{
     text-decoration: underline;
 }
-#sup_copy,#inv_paid,#cn_head,#sup_copy_two{
-    border-style: solid;
+#inv_paid,#cn_head{
     font-size:15px;
 }
+
 #sup_copy_td{
     width: 100px;
 }
@@ -96,13 +96,18 @@ tfoot{
 
 #sup_copy{
     position: absolute;
-    top: 47px;
-    left:650px;
+    top: 20px;
+    left:530px;
+    width:230px;
+    height:80px;
 }
 #sup_copy_two{
     position: absolute;
-    top: 790px;
-    left:640px;
+    top: 730px;
+    left:530px;
+    width:230px;
+    height:80px;
+    margin-top:26px;
 }
 #table_row{
    height:5px;
@@ -164,4 +169,14 @@ tfoot{
 }
 #headings{
     width:100%;
+}
+#inv_paid{
+position:absolute;
+right: 804px;
+top: 90px;
+}
+#inv_paid_two{
+    position: absolute;
+    top: 825px;
+    right:804px;
 }

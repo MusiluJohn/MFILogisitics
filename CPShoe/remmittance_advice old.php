@@ -23,7 +23,6 @@ $batch=$_SESSION['batch'];
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     <button class="btn btn-success" id="prints" name="prints" onclick='print_page()'>
     Print
     </button>
@@ -52,15 +51,16 @@ $batch=$_SESSION['batch'];
     $stmt = sqlsrv_query($conn, $sql, $params) or die(print_r( sqlsrv_errors(), true));
     while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
 ?>    
-        <label id="sup_copy" name="sup_copy">SUPPLIER COPY</label>
+<img src="assets\img\tech\Supplier_copy.jpg" id="sup_copy" >
+<img src="assets\img\tech\INV_PAID.jpg" id="inv_paid" >
         <tr>
             <th>
                 <label id='co_name' name='co_name'>C & P SHOE INDUSTRIES LTD</label>
             </th>
-            <th>
-                <label id="remit" name="remit">REMITTANCE ADVICE</label>
+            <th  id="supcopy" name="supcopy">
+                
             </th>
-            <th id="supcopy" name="supcopy">     
+            <th>    
             </th>
             <th>
                 <label id='d' name='d'>DATE: </label><?php  echo $row['payment_date']; ?>
@@ -89,9 +89,12 @@ $batch=$_SESSION['batch'];
                 <label id='batch' name='batch'>BATCH: <?php echo $batch; ?></label>
             </th>
         </tr>
+
         <tr>
-            <th>
-                <label id='inv_paid' name='inv_paid'>INVOICE/S BEING PAID</label>
+            <th style="margin-bottom:10px;">
+            
+                </br>
+                <!-- <label id='inv_paid' name='inv_paid'> INVOICE/S BEING PAID </label> -->
             </th>
             <th>
             <label>PIN:</label>  <?php echo $row['tax_number']; }?>  
@@ -324,13 +327,14 @@ $batch=$_SESSION['batch'];
     $stmt = sqlsrv_query($conn, $sql, $params) or die(print_r( sqlsrv_errors(), true));
     while( $row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC) ) {
 ?> 
-<label id='sup_copy_two' name='sup_copy_two'>C&P SHOE COPY</label>
+<img src="assets\img\tech\c&p_shoe.jpg" id="sup_copy_two" >
+<img src="assets\img\tech\INV_PAID.jpg" id="inv_paid_two" >
         <tr>
             <th>
                 <label id='co_name' name='co_name'>C & P SHOE INDUSTRIES LTD</label>
             </th>
             <th>
-                <label id="remit" name="remit">REMITTANCE ADVICE</label>
+                <!-- <label id="remit" name="remit">REMITTANCE ADVICE</label> -->
             </th>
             <th id="supcopy" name="supcopy">
                 
@@ -364,7 +368,7 @@ $batch=$_SESSION['batch'];
         </tr>
         <tr>
             <th>
-                <label id='inv_paid' name='inv_paid'>INVOICE/S BEING PAID</label>
+
             </th>
             <th>
             <label>PIN:</label>  <?php echo $row['tax_number']; }?>  

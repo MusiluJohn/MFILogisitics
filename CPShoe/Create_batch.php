@@ -195,7 +195,7 @@ $todate=$_SESSION['todate'];
                                 case when max(tax_amount)>0 then  
                                     case when max(isnull(b.iCurrencyID,0))=0 then 
                                     
-                                        case when ((max(a.Outstanding/1.16) * 0.02)-floor((max(a.Outstanding/1.16) * 0.02)))>0 
+                                        case when round(((max(a.Outstanding/1.16) * 0.02)-floor((max(a.Outstanding/1.16) * 0.02))),2)>0 
                                         then floor(((max(a.Outstanding/1.16) * 0.02)))+1
                                         else
                                         (round(max(a.Outstanding/1.16) * 0.02,0))
@@ -205,7 +205,7 @@ $todate=$_SESSION['todate'];
                                 when max(tax_amount)=0 and max(t.code)='JC'
                                 then
                                     case when max(isnull(b.iCurrencyID,0))=0 then 
-                                        case when ((max(a.Outstanding/1.16) * 0.02)-floor((max(a.Outstanding/1.16) * 0.02)))>0 
+                                        case when round(((max(a.Outstanding/1.16) * 0.02)-floor((max(a.Outstanding/1.16) * 0.02))),2)>0 
                                         then floor(((max(a.Outstanding/1.16) * 0.02)))+1
                                         else
                                         (round(max(a.Outstanding/1.16) * 0.02,0))
@@ -228,7 +228,7 @@ $todate=$_SESSION['todate'];
                                 case when max(tax_amount)<>0 or (max(tax_amount)=0 and max(t.code)='JC') then
                                     (case when max(isnull(b.iCurrencyID,0))=0 then max(a.Outstanding) else max(a.fforeignOutstanding) end)-
                                         case when max(b.icurrencyid)=0 then 
-                                            case when ((max(a.Outstanding/1.16) * 0.02)-floor((max(a.Outstanding/1.16) * 0.02)))>0 
+                                            case when round(((max(a.Outstanding/1.16) * 0.02)-floor((max(a.Outstanding/1.16) * 0.02))),2)>0 
                                             then floor(((max(a.Outstanding/1.16) * 0.02)))+1
                                             else
                                             (round(max(a.Outstanding/1.16) * 0.02,2))
